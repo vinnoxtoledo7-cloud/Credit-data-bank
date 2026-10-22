@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Beneficiários e transferências | Credit Data Bank</title><link rel="stylesheet" href="credit-clients.css"></head>
+<body><header><strong>CREDIT DATA BANK</strong><span>HOMOLOGAÇÃO</span></header><main>
+<nav><a href="credit-accounts-ledger.html">Contas e extratos</a><a href="credit-transfers.html">Entre minhas contas</a><button id="logout" hidden>Sair</button></nav>
+<h1>Transferências entre clientes</h1><p class="notice">SIMULAÇÃO • Valores fictícios. Nenhum dinheiro real é movimentado. Não é Pix, TED ou comprovante bancário.</p>
+<p id="msg" role="status" aria-live="polite"></p>
+<section id="login" class="card"><h2>Entrar</h2><form id="auth"><label>E-mail<input name="email" type="email" autocomplete="username" required></label><label>Senha<input name="password" type="password" autocomplete="current-password" required></label><button>Entrar</button></form></section>
+<section id="work" hidden>
+<div class="columns"><section class="card"><h2>Beneficiários</h2><p>Peça ao outro cliente o identificador da conta fictícia, disponível em Contas e extratos. Confira o nome cadastrado antes de transferir.</p>
+<form id="beneficiary-form"><label>Identificador da conta de destino<input name="account" required placeholder="UUID da conta fictícia" pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"></label><label>Apelido<input name="nickname" required minlength="2" maxlength="80"></label><button>Salvar beneficiário</button></form><div id="beneficiaries"></div></section>
+<section class="card"><h2>Nova transferência simulada</h2><form id="transfer-form"><label>Conta de origem<select id="source" name="source" required></select></label><label>Beneficiário<select id="beneficiary" name="beneficiary" required></select></label><label>Valor fictício (R$)<input name="amount" type="number" min="0.01" max="1000000" step="0.01" required></label><label>Descrição<input name="description" required minlength="3" maxlength="150"></label><button id="send">Revisar transferência</button></form><p class="muted">Limite por operação: R$ 1.000.000 fictícios.</p></section></div>
+<section class="card"><h2>Histórico e comprovantes</h2><div class="toolbar"><label>Direção<select id="direction"><option value="all">Todas</option><option value="sent">Enviadas</option><option value="received">Recebidas</option></select></label><button id="refresh">Atualizar</button></div><div id="history"></div><button id="more" hidden>Carregar mais</button></section>
+<section class="card"><h2>Minha atividade de segurança</h2><p class="muted">Últimos 20 eventos: beneficiários e tentativas de transferência.</p><div id="audit"></div></section>
+</section>
+<dialog id="review"><h2>Confirmar simulação</h2><div id="review-details"></div><p class="notice">Nenhum dinheiro real será movimentado.</p><button id="confirm">Confirmar valor fictício</button> <button id="cancel">Voltar</button></dialog>
+<dialog id="receipt"><article id="receipt-content"></article><div class="toolbar no-print"><button id="download">Baixar comprovante (.txt)</button><button id="print">Imprimir / PDF</button><button id="close-receipt">Fechar</button></div></dialog>
+</main><script type="module" src="credit-clients.js"></script></body></html>
