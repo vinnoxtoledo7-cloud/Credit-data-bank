@@ -37,3 +37,12 @@ body{background:var(--cdb-bg)!important;color:#132644!important}
 @media(min-width:1050px){.bank-shell{padding-bottom:40px}.bank-main{padding-bottom:25px}.bottom-nav{top:105px;bottom:auto;left:max(18px,calc((100vw - 1180px)/2));transform:none;width:190px;border:1px solid #e6ebf2!important;border-radius:20px;padding:10px;display:flex;flex-direction:column;box-shadow:0 10px 35px #071a3c0c!important}.bottom-item{width:100%;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;padding:13px;border-radius:12px;text-align:left}.bottom-item.active{background:#fff0e8!important}.bank-main{margin-left:max(230px,calc((100vw - 1180px)/2 + 230px));margin-right:max(20px,calc((100vw - 1180px)/2));max-width:none}.utility{margin-left:max(230px,calc((100vw - 1180px)/2 + 230px))}}
 @media(max-width:650px){.bank-head{height:68px;padding:0 16px}.wordmark{font-size:29px}.wordmark small{font-size:11px;margin-left:7px}.bank-main{padding:18px 15px 24px}.balance-card{padding:24px;min-height:215px}.balance-amount{font-size:38px}.bottom-nav{border-radius:16px 16px 0 0}.bottom-item{font-size:10px;padding:10px 3px}.nav-ico{font-size:22px}.utility{padding:12px 15px 18px}}
 @media(prefers-reduced-motion:reduce){.quick,.bottom-item{transition:none}}
+
+/* Premium glass accents: translucent surfaces with legible fallbacks */
+@supports (backdrop-filter:blur(12px)) or (-webkit-backdrop-filter:blur(12px)) {
+ .bottom-nav{background:rgba(255,255,255,.83)!important;backdrop-filter:blur(22px) saturate(145%);-webkit-backdrop-filter:blur(22px) saturate(145%);border-color:rgba(224,233,245,.9)!important}
+ .quick{background:rgba(255,255,255,.82)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,.9)!important}
+ .head-profile,.utility-btn{background:rgba(255,255,255,.8)!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+ .balance-card{background:linear-gradient(125deg,rgba(7,26,60,.98),rgba(16,62,117,.95) 75%,rgba(22,77,132,.92))!important}
+}
+@media(prefers-reduced-transparency:reduce){.bottom-nav,.quick,.head-profile,.utility-btn{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#fff!important}}
