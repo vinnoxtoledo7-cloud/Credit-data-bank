@@ -46,3 +46,18 @@ body{background:var(--cdb-bg)!important;color:#132644!important}
  .balance-card{background:linear-gradient(125deg,rgba(7,26,60,.98),rgba(16,62,117,.95) 75%,rgba(22,77,132,.92))!important}
 }
 @media(prefers-reduced-transparency:reduce){.bottom-nav,.quick,.head-profile,.utility-btn{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#fff!important}}
+
+/* Five-destination navigation and services hub */
+.bottom-nav{justify-content:space-around!important;gap:3px}
+.bottom-item{flex:1 1 0;max-width:132px;min-width:0}
+.bottom-item.ai-tab .nav-ico{display:grid;place-items:center;width:38px;height:38px;margin:-10px auto 3px;border-radius:14px;background:#fa591c;color:white!important;box-shadow:0 6px 14px #fa591c42;font-size:24px}
+.bottom-item.ai-tab.active .nav-ico{background:#dc4815}
+.more-panel{background:rgba(255,255,255,.88);border:1px solid #e4eaf3;border-radius:24px;padding:24px;box-shadow:0 12px 32px #071a3c0b}
+.more-panel h2{margin:0 0 6px;color:#071a3c}.more-panel p{color:#61728b;margin:0 0 22px}
+.more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.more-link{display:flex;align-items:center;gap:12px;min-height:72px;border:1px solid #e5eaf2;border-radius:17px;background:#fff;color:#153252;padding:14px;text-align:left;cursor:pointer}
+.more-link span:first-child{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#fff0e8;color:#ed5b22;font-size:22px;flex-shrink:0}
+.more-link strong{flex:1;font-size:14px}.more-link span:last-child{font-size:22px;color:#72839a}
+.more-link:focus-visible{outline:3px solid #fa591c;outline-offset:2px}
+@media(min-width:1050px){.bottom-item{max-width:none}.bottom-item.ai-tab .nav-ico{margin:0;width:34px;height:34px}}
+@media(max-width:650px){.more-panel{padding:17px}.more-grid{grid-template-columns:1fr}.bottom-item.ai-tab .nav-ico{width:36px;height:36px}}
