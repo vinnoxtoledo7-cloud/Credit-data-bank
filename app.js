@@ -4,7 +4,7 @@ const app=document.getElementById('app');
 const safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const note='Ambiente de homologação: sem conta bancária, Pix, transferências, saldos ou cartões reais.';
 let user=null,admin=false,page='home',profiles=[];
-const labels={home:'Visão geral',profile:'Meu cadastro',accounts:'Contas',pix:'Pix',statement:'Extrato',cards:'Cartões',ai:'Credit AI',admin:'Administração',settings:'Configurações'};
+const labels={home:'Visão geral',profile:'Meu cadastro',accounts:'Contas',pix:'Pix',statement:'Extrato',more:'Mais serviços',cards:'Cartões',ai:'Credit AI',admin:'Administração',settings:'Configurações'};
 const statusLabel={draft:'Rascunho',submitted:'Enviado para análise',under_review:'Em análise',approved:'Aprovado (cadastro)',rejected:'Rejeitado'};
 const feedback=(s,ok=false)=>`<p class="${ok?'success':'error'}" role="status">${safe(s)}</p>`;
 function publicView(mode='login',message=''){
