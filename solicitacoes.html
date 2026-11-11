@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Solicitações | Credit Data Bank</title>
+<style>body{font-family:system-ui,Arial;background:#f4f7fb;color:#16243c;margin:0}main{max-width:780px;margin:50px auto;padding:24px}section{background:white;border:1px solid #dce4ef;border-radius:14px;padding:24px}h1{margin-top:0}input,button{font:inherit;padding:12px;border-radius:8px}input{width:100%;box-sizing:border-box;border:1px solid #aebbd0}button{background:#123c75;color:white;border:0;margin-top:12px;cursor:pointer}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{padding:12px;text-align:left;border-bottom:1px solid #e5e9f0}small{color:#52627b}#notice{margin-top:12px}</style></head>
+<body><main><section><h1>Minhas solicitações</h1><p>Acompanhamento de pedidos de abertura de conta em <strong>ambiente de testes</strong>. Nenhuma conta bancária real é aberta aqui.</p>
+<label for="token">Token de sessão Supabase (homologação)</label><input id="token" type="password" autocomplete="off" placeholder="Cole o token temporário de acesso"><small>O token não é armazenado no navegador e é usado somente nesta consulta. Não compartilhe seu token.</small>
+<div><button id="load">Consultar solicitações</button></div><p id="notice" role="status"></p><div id="results"></div></section></main>
+<script>
+const button=document.getElementById('load'),notice=document.getElementById('notice'),results=document.getElementById('results');
+button.addEventListener('click',async()=>{
+ results.replaceChildren();notice.textContent='Consultando...';
+ const token=document.getElementById('token').value.trim();
+ if(!token){notice.textContent='Informe uma sessão válida.';return}
+ button.disabled=true;
+ try{
+  const res=await fetch('/api/baas/my-account-requests',{headers:{Authorization:'Bearer '+token},cache:'no-store'});
+  if(!res.ok){notice.textContent=res.status===401?'Sessão inválida ou expirada.':'Não foi possível consultar as solicitações.';return}
+  const data=await res.json(),rows=Array.isArray(data.requests)?data.requests:[];
+  notice.textContent=rows.length?rows.length+' solicitação(ões) encontrada(s).':'Nenhuma solicitação encontrada.';
+  if(!rows.length)return;
+  const table=document.createElement('table'),head=document.createElement('tr');
+  for(const title of ['Solicitação','Situação','Data']){const th=document.createElement('th');th.textContent=title;head.append(th)}table.append(head);
+  for(const item of rows){const tr=document.createElement('tr');for(const value of [item.id,item.status,new Date(item.created_at).toLocaleString('pt-BR')]){const td=document.createElement('td');td.textContent=value||'-';tr.append(td)}table.append(tr)}
+  results.append(table);
+ }catch(_){notice.textContent='Falha de conexão. Tente novamente.'}finally{button.disabled=false}
+});
+</script></body></html>
