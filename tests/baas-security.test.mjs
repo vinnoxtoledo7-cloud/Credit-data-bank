@@ -43,3 +43,36 @@ test('profile lookup uses the authenticated caller identity and scoped bearer to
  assert.match(s,/user\.id/);
  assert.doesNotMatch(s,/SERVICE_ROLE|service_role/);
 });
+
+test('profile lookup scopes requests independently for two authenticated users',async()=>{
+ const h=await handler('api/baas/my-profiles.js');
+ const oldFetch=globalThis.fetch;
+ const oldUrl=process.env.SUPABASE_URL;
+ const oldKey=process.env.SUPABASE_PUBLISHABLE_KEY;
+ process.env.SUPABASE_URL='https://sandbox.example.invalid';
+ process.env.SUPABASE_PUBLISHABLE_KEY='public-test-key';
+ const calls=[];
+ globalThis.fetch=async (url,opts)=>{
+  const path=new URL(url).pathname;
+  if(path==='/auth/v1/user'){
+   return {ok:true,json:async()=>({id:opts.headers.Authorization==='Bearer token-one'?'11111111-1111-4111-8111-111111111111':'22222222-2222-4222-8222-222222222222'})};
+  }
+  calls.push({url:String(url),headers:opts.headers});
+  return {ok:true,json:async()=>([])};
+ };
+ try{
+  for(const token of ['token-one','token-two']){
+   const res=response();
+   await h({method:'GET',headers:{authorization:'Bearer '+token}},res);
+   assert.equal(res.statusCode,200);
+  }
+  assert.equal(calls.length,2);
+  assert.match(calls[0].url,/owner_id=eq\.11111111-1111-4111-8111-111111111111/);
+  assert.match(calls[1].url,/owner_id=eq\.22222222-2222-4222-8222-222222222222/);
+  assert.notEqual(calls[0].headers.Authorization,calls[1].headers.Authorization);
+ }finally{
+  globalThis.fetch=oldFetch;
+  if(oldUrl===undefined)delete process.env.SUPABASE_URL;else process.env.SUPABASE_URL=oldUrl;
+  if(oldKey===undefined)delete process.env.SUPABASE_PUBLISHABLE_KEY;else process.env.SUPABASE_PUBLISHABLE_KEY=oldKey;
+ }
+});
