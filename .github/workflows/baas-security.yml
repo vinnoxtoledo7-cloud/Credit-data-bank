@@ -1,4 +1,4 @@
-name: BaaS security checks
+name: Homologation security and contracts
 on:
   push:
     branches: [main]
@@ -15,4 +15,4 @@ jobs:
         with:
           node-version: '22'
       - name: Run sandbox endpoint regression tests
-        run: node --test tests/baas-security.test.mjs
+        run: node --test tests/*.test.mjs

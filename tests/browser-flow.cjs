@@ -13,7 +13,7 @@ const fs=require('node:fs');const assert=require('node:assert/strict');
  assert.equal(await page.locator('#beneficiaries img').count(),0);
  await page.locator('#source').selectOption(users[0].account);await page.locator('#beneficiary').selectOption({index:1});await page.locator('#transfer-form [name=amount]').fill('12.34');await page.locator('#transfer-form [name=description]').fill('QA browser simulation');await page.locator('#send').click();await page.locator('#review').waitFor({state:'visible'});await page.locator('#confirm').click();await page.locator('#receipt').waitFor({state:'visible'});
  assert.match(await page.locator('#receipt-content').innerText(),/12,34/);
- const downloadPromise=page.waitForEvent('download');await page.locator('#download').click();const download=await downloadPromise;assert.match(download.suggestedFilename(),/^simulacao-.*\.txt$/);
+ const downloadPromise=page.waitForEvent('download');await page.locator('#download').click();const download=await downloadPromise;assert.match(download.suggestedFilename(),/^simulacao-.*\.pdf$/);
  await page.locator('#close-receipt').click();await page.locator('#history button').first().waitFor();await page.reload();await page.locator('#history button').first().click();await page.locator('#receipt').waitFor({state:'visible'});assert.match(await page.locator('#receipt-content').innerText(),/QA browser simulation/);await page.locator('#close-receipt').click();
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
  await page.screenshot({path:'/tmp/cdb-mobile.png',fullPage:true});

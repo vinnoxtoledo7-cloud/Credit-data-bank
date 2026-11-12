@@ -2,10 +2,30 @@
   "version": 2,
   "cleanUrls": true,
   "headers": [
-    {"source":"/(.*)","headers":[
-      {"key":"X-Content-Type-Options","value":"nosniff"},
-      {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
-      {"key":"X-Frame-Options","value":"DENY"}
-    ]}
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Content-Security-Policy-Report-Only",
+          "value": "default-src 'self'; script-src 'self' https://esm.sh 'sha256-ivqlq+xFt3ZGnmfGXWjKlsX/7rM39SYpNXupxJqUS3o=' 'sha256-apOVWbOP3dSmH1eRGS1Z6WryaffstVKOKtKYho20LDQ=' 'sha256-2uLZUR77SadWnP8MoGfNuZoztgvUzKczhqg72oA9Xoo=' 'sha256-8QU0Jkdr8VRd7xfA4w6eh9zJhenblv3xmlEs6DTCUyg=' 'sha256-82nyEA2RvdBkEXKx0sQRTKeDoHEpnjfQOYjm/bqncCU=' 'sha256-yj5zWcppH5CElJz7ECbbZRlnOx9agpoksuphWvSluvk='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://jruspbiljejmknjvnesd.supabase.co wss://jruspbiljejmknjvnesd.supabase.co; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
   ]
 }

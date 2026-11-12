@@ -1,3 +1,4 @@
+import {receiptLines,downloadPDF} from './shared/receipts.js';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.10';
 const db = createClient('https://jruspbiljejmknjvnesd.supabase.co', 'sb_publishable_02sp2eGomD108oDM1Be8yg_-z7URJmT');
 const el = id => document.getElementById(id);
@@ -49,8 +50,8 @@ async function history(reset=true) {
 async function loadAudit(){const rows=await checked(db.from('credit_audit_events').select('action,outcome,reason,created_at').eq('actor_id',user.id).order('created_at',{ascending:false}).limit(20));el('audit').replaceChildren();const labels={beneficiary_save:'Beneficiário salvo',beneficiary_remove:'Beneficiário removido',client_transfer:'Transferência simulada'};for(const r of rows)p(el('audit'),`${date(r.created_at)} · ${labels[r.action]||r.action} · ${r.outcome==='success'?'Concluído':'Recusado'}${r.reason?' · '+r.reason:''}`);if(!rows.length)p(el('audit'),'Sem eventos registrados.');}
 async function refresh(){await loadAccounts();await loadBeneficiaries();await history();await loadAudit();}
 async function receipt(id) {
-  const t=await checked(db.from('credit_client_transfers').select('id,source_account_id,destination_account_id,source_name,destination_name,amount,description,created_at,environment').eq('id',id).single());
-  const lines=['COMPROVANTE DE SIMULAÇÃO — SEM VALOR BANCÁRIO',`Identificador: ${t.id}`,`Ambiente: ${t.environment}`,`Data de registro: ${date(t.created_at)}`,`Origem: ${t.source_name}`,`Conta de origem: ${t.source_account_id}`,`Destino: ${t.destination_name}`,`Conta de destino: ${t.destination_account_id}`,`Valor fictício: ${money(t.amount)}`,`Descrição: ${t.description}`,'Status: simulação concluída. Nenhum dinheiro real foi movimentado.'];
+  const t=await checked(db.rpc('credit_transfer_receipt',{p_id:id}));
+  const lines=receiptLines(t);
   receiptText=lines.join('\n');receiptId=t.id;el('receipt-content').replaceChildren();const title=document.createElement('h2');title.textContent=lines.shift();el('receipt-content').append(title);lines.forEach(line=>p(el('receipt-content'),line));if(!el('receipt').open)el('receipt').showModal();
 }
 el('auth').onsubmit=e=>{e.preventDefault();run(async()=>{const b=e.target.querySelector('button');b.disabled=true;try{const f=new FormData(e.target);await checked(db.auth.signInWithPassword({email:f.get('email'),password:f.get('password')}));e.target.reset();message('');await init();}finally{b.disabled=false;}});};
@@ -75,7 +76,7 @@ el('confirm').onclick=()=>run(async()=>{
 });
 el('cancel').onclick=()=>el('review').close();el('review').addEventListener('cancel',e=>{if(busy)e.preventDefault();});
 el('close-receipt').onclick=()=>el('receipt').close();el('print').onclick=()=>window.print();
-el('download').onclick=()=>{const url=URL.createObjectURL(new Blob([receiptText],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`simulacao-${receiptId}.txt`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+el('download').onclick=()=>downloadPDF(receiptText.split('\n'),'simulacao-'+receiptId);
 el('refresh').onclick=()=>run(refresh);el('direction').onchange=()=>run(()=>history());el('more').onclick=()=>run(async()=>{el('more').disabled=true;try{await history(false);}finally{el('more').disabled=false;}});
 el('logout').onclick=()=>run(async()=>{await checked(db.auth.signOut());location.reload();});
 db.auth.onAuthStateChange(event=>{if(event==='SIGNED_OUT'){el('work').hidden=true;el('login').hidden=false;el('logout').hidden=true;el('receipt').close();el('review').close();}});

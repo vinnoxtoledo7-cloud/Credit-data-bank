@@ -37,7 +37,7 @@ select public.payroll_assign_approver('41000000-0000-4000-8000-000000000001','qa
 select pg_temp.expect_error($q$select public.payroll_assign_approver('41000000-0000-4000-8000-000000000001','qa-finance@example.invalid',null)$q$,'Perfil inválido');
 select public.payroll_submit('61000000-0000-4000-8000-000000000001');
 select pg_temp.expect_error($q$select public.payroll_simulate_payment('61000000-0000-4000-8000-000000000001')$q$,'Dupla aprovação obrigatória');
-select pg_temp.expect_error($q$select public.payroll_approve('61000000-0000-4000-8000-000000000001')$q$,'Sem autorização financeira');
+select pg_temp.expect_error($q$select public.payroll_approve('61000000-0000-4000-8000-000000000001')$q$,'Criador não pode aprovar a própria folha');
 select set_config('request.jwt.claim.sub','11000000-0000-4000-8000-000000000002',true);
 select pg_temp.expect_error($q$select public.credit_demo_entry('21000000-0000-4000-8000-000000000001','demo_credit',1,'QA foreign')$q$,'Conta não autorizada');
 select pg_temp.expect_error($q$select public.payroll_assign_approver('41000000-0000-4000-8000-000000000001','qa-finance@example.invalid','finance')$q$,'Apenas responsável');

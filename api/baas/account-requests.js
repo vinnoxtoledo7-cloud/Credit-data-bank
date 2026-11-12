@@ -9,8 +9,8 @@ export default async function handler(req,res){
  if(typeof customer_profile_id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(customer_profile_id)
  ||typeof idempotency_key!=='string'||!/^[a-zA-Z0-9_-]{8,128}$/.test(idempotency_key))
  return res.status(400).json({error:'invalid_request'});
- const url=process.env.SUPABASE_URL;
- const key=process.env.SUPABASE_PUBLISHABLE_KEY||process.env.SUPABASE_ANON_KEY;
+ const url=process.env.SUPABASE_URL||process.env.VITE_SUPABASE_URL;
+ const key=process.env.SUPABASE_PUBLISHABLE_KEY||process.env.SUPABASE_ANON_KEY||process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
  if(!url||!key)return res.status(503).json({error:'sandbox_not_configured'});
  try{
   const base=new URL(url);
