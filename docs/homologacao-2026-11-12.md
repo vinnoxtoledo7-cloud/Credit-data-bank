@@ -70,3 +70,7 @@ CSP em **Report-Only**, gerada com hashes dos scripts inline. Ainda não bloquei
 | Compliance | PENDENTE avaliação jurídica, bases legais/termos/consentimentos, KYC/KYB/PLD operacional |
 
 A aplicação não está certificada, autorizada como instituição financeira nem pronta para dinheiro real. Não encerrar a missão enquanto os critérios pendentes não forem efetivamente validados.
+
+## Continuação: folha financiada
+
+Migração aditiva aplicada. `tests/payroll-funded.sql` executado com rollback e aprovado: criador impedido de aprovar, dois aprovadores distintos, acesso de terceiro negado, débito de 100 com saldo final 125 e reenvio sem novo débito. Tela passou a selecionar origem e usar payroll_simulate_funded. PENDENTE: validação visual autenticada e concorrência específica de folha em conexões independentes. O caminho legado ainda existe e precisa ser desativado após validação de compatibilidade.
