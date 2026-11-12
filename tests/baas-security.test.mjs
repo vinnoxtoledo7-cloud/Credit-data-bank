@@ -76,3 +76,31 @@ test('profile lookup scopes requests independently for two authenticated users',
   if(oldKey===undefined)delete process.env.SUPABASE_PUBLISHABLE_KEY;else process.env.SUPABASE_PUBLISHABLE_KEY=oldKey;
  }
 });
+
+test('sandbox application requires authentication',async()=>{
+ const h=await handler('api/baas/account-requests.js');
+ const res=response();await h({method:'POST',headers:{},body:{customer_profile_id:'11111111-1111-4111-8111-111111111111',idempotency_key:'test-key-123'}},res);
+ assert.equal(res.statusCode,401);
+});
+test('sandbox application rejects malformed profile and idempotency keys',async()=>{
+ const h=await handler('api/baas/account-requests.js');
+ const res=response();await h({method:'POST',headers:{authorization:'Bearer validtoken'},body:{customer_profile_id:'not-a-uuid',idempotency_key:'bad'}},res);
+ assert.equal(res.statusCode,400);
+});
+test('sandbox application lookup requires authentication',async()=>{
+ const h=await handler('api/baas/my-account-requests.js');
+ const res=response();await h({method:'GET',headers:{}},res);
+ assert.equal(res.statusCode,401);
+});
+test('sandbox application endpoint uses caller identity and does not hold privileged key',async()=>{
+ const s=await source('api/baas/account-requests.js');
+ assert.match(s,/\/auth\/v1\/user/);
+ assert.match(s,/owner_id:user\.id/);
+ assert.doesNotMatch(s,/SERVICE_ROLE|service_role/);
+});
+test('sandbox application listing filters by authenticated owner',async()=>{
+ const s=await source('api/baas/my-account-requests.js');
+ assert.match(s,/owner_id/);
+ assert.match(s,/user\.id/);
+ assert.doesNotMatch(s,/SERVICE_ROLE|service_role/);
+});
