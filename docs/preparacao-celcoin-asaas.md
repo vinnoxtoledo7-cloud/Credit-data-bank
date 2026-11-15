@@ -47,3 +47,7 @@ As páginas Celcoin apresentam orientações diferentes sobre liberação de IP/
 Este incremento é aditivo e sem migração de banco. Reverter o commit restaura o contrato anterior. Não reverter ou apagar ledger para corrigir interface. Antes de habilitar sandbox externo: métricas de erros/latência, fila atrasada, retries/DLQ, discrepâncias, expiração de credenciais/certificados e alertas sem payloads pessoais. Manter produção sem rota de ativação enquanto não houver autorização expressa.
 
 **Missão integral PENDENTE: este documento registra limites reais da implementação.**
+
+## Incremento Asaas de leitura
+
+Cliente backend-only em providers/asaas.js: GET sandbox de saldo, extrato paginado, cobrança e QR Code; origem fixa, redirects recusados, timeout e no máximo uma repetição para 502/503/504. Sem operação de escrita e sem conexão ao seletor de runtime. Verificador de token Asaas implementado isoladamente; endpoints continuam bloqueados até persistência durável. 27 testes locais passaram com HTTP injetado; nenhuma chamada oficial foi executada. ASAAS_SANDBOX_API_KEY e ASAAS_SANDBOX_WEBHOOK_TOKEN serão segredos backend; não foram configurados. Inbox/worker, cliente Celcoin, escritas Asaas e validação remota permanecem PENDENTES.
