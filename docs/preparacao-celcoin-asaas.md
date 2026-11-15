@@ -51,3 +51,7 @@ Este incremento é aditivo e sem migração de banco. Reverter o commit restaura
 ## Incremento Asaas de leitura
 
 Cliente backend-only em providers/asaas.js: GET sandbox de saldo, extrato paginado, cobrança e QR Code; origem fixa, redirects recusados, timeout e no máximo uma repetição para 502/503/504. Sem operação de escrita e sem conexão ao seletor de runtime. Verificador de token Asaas implementado isoladamente; endpoints continuam bloqueados até persistência durável. 27 testes locais passaram com HTTP injetado; nenhuma chamada oficial foi executada. ASAAS_SANDBOX_API_KEY e ASAAS_SANDBOX_WEBHOOK_TOKEN serão segredos backend; não foram configurados. Inbox/worker, cliente Celcoin, escritas Asaas e validação remota permanecem PENDENTES.
+
+## Contrato de conciliação confirmado
+
+Módulo puro de comparação implementado: provedor, ambiente, referência, centavos e status. Exige indicação de consulta confirmada ao fornecedor, recusa regressão de concluído/revertido para pendente e aceita reversão confirmada. Eventos fora de ordem não determinam o estado. Nenhum ajuste automático ou escrita de ledger. 29 testes locais passaram. Ainda é necessário ligar este contrato ao cliente do parceiro e worker durável; confirmedByQuery deve ser atribuído exclusivamente por backend confiável, nunca pelo navegador ou webhook. Vercel consultada neste incremento: deployment dpl_CLgfc4KLjN5onNmVcm9YWe1xynH2 READY; não é evidência do próximo commit.
