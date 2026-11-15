@@ -55,3 +55,7 @@ Cliente backend-only em providers/asaas.js: GET sandbox de saldo, extrato pagina
 ## Contrato de conciliação confirmado
 
 Módulo puro de comparação implementado: provedor, ambiente, referência, centavos e status. Exige indicação de consulta confirmada ao fornecedor, recusa regressão de concluído/revertido para pendente e aceita reversão confirmada. Eventos fora de ordem não determinam o estado. Nenhum ajuste automático ou escrita de ledger. 29 testes locais passaram. Ainda é necessário ligar este contrato ao cliente do parceiro e worker durável; confirmedByQuery deve ser atribuído exclusivamente por backend confiável, nunca pelo navegador ou webhook. Vercel consultada neste incremento: deployment dpl_CLgfc4KLjN5onNmVcm9YWe1xynH2 READY; não é evidência do próximo commit.
+
+## Fila durável privada
+
+Migração durable_integration_jobs aplicada: tabela sandbox-only, identificador de evento único por provedor/ambiente, hash, referência, tentativas limitadas, estados retry/dead_letter, lease/token e índices. RLS ativa sem privilégios de cliente. Teste SQL com rollback confirmou rejeição de duplicidade e processing sem lease; 29 testes Node novamente aprovados. A tabela sozinha NÃO constitui worker nem endpoint de webhook operacional. Persistência autenticada, consumo com SKIP LOCKED, heartbeat, recuperação de leases, reprocessamento administrativo e ligação aos provedores continuam PENDENTES. Não há credenciais de servidor configuradas para consumo. Deployment consultado antes deste commit: dpl_4h1LXGi4SnqSiq4KMWHKjcBApeVA READY.
